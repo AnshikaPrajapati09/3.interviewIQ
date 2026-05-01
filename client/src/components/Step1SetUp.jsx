@@ -12,9 +12,11 @@ import axios from "axios"
 import { ServerUrl } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
+
 function Step1SetUp({ onStart }) {
-    const {userData}= useSelector((state)=>state.user)
+    const { userData } = useSelector((state) => state.user)
     const dispatch = useDispatch()
+
     const [role, setRole] = useState("");
     const [experience, setExperience] = useState("");
     const [mode, setMode] = useState("Technical");
@@ -26,7 +28,6 @@ function Step1SetUp({ onStart }) {
     const [analysisDone, setAnalysisDone] = useState(false);
     const [analyzing, setAnalyzing] = useState(false);
 
-
     const handleUploadResume = async () => {
         if (!resumeFile || analyzing) return;
         setAnalyzing(true)
@@ -37,8 +38,6 @@ function Step1SetUp({ onStart }) {
         try {
             const result = await axios.post(ServerUrl + "/api/interview/resume", formdata, { withCredentials: true })
 
-            console.log(result.data)
-
             setRole(result.data.role || "");
             setExperience(result.data.experience || "");
             setProjects(result.data.projects || []);
@@ -47,7 +46,6 @@ function Step1SetUp({ onStart }) {
             setAnalysisDone(true);
 
             setAnalyzing(false);
-
         } catch (error) {
             console.log(error)
             setAnalyzing(false);
@@ -57,213 +55,174 @@ function Step1SetUp({ onStart }) {
     const handleStart = async () => {
         setLoading(true)
         try {
-           const result = await axios.post(ServerUrl + "/api/interview/generate-questions" , {role, experience, mode , resumeText, projects, skills } , {withCredentials:true}) 
-           console.log(result.data)
-           if(userData){
-            dispatch(setUserData({...userData , credits:result.data.creditsLeft}))
-           }
-           setLoading(false)
-           onStart(result.data)
+            const result = await axios.post(
+                ServerUrl + "/api/interview/generate-questions",
+                { role, experience, mode, resumeText, projects, skills },
+                { withCredentials: true }
+            )
+
+            if (userData) {
+                dispatch(setUserData({ ...userData, credits: result.data.creditsLeft }))
+            }
+
+            setLoading(false)
+            onStart(result.data)
 
         } catch (error) {
             console.log(error)
             setLoading(false)
         }
     }
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4'>
+            className='min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4'>
 
-            <div className='w-full max-w-6xl bg-white rounded-3xl shadow-2xl grid md:grid-cols-2 overflow-hidden'>
+            <div className='w-full max-w-6xl bg-white rounded-2xl shadow-md grid md:grid-cols-2 overflow-hidden'>
 
+                {/* LEFT */}
                 <motion.div
-                    initial={{ x: -80, opacity: 0 }}
+                    initial={{ x: -60, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.7 }}
-                    className='relative bg-gradient-to-br from-green-50 to-green-100 p-12 flex flex-col justify-center'>
+                    className='bg-blue-50/60 p-10 flex flex-col justify-center border-r border-blue-100'>
 
-                    <h2 className="text-4xl font-bold text-gray-800 mb-6">
-                        Start Your AI Interview
+                    <h2 className="text-3xl font-semibold text-gray-800 mb-3">
+                        AI Interview Setup
                     </h2>
 
-                    <p className="text-gray-600 mb-10">
-                        Practice real interview scenarios powered by AI.
-                        Improve communication, technical skills, and confidence.
+                    <p className="text-gray-600 mb-8 text-sm leading-relaxed">
+                        Create your personalized mock interview experience with AI-driven questions, voice interaction, and instant feedback.
                     </p>
+
+                    <div className='space-y-4'>
+                        {[
+                            { icon: <FaUserTie />, text: "Role & Experience Setup" },
+                            { icon: <FaMicrophoneAlt />, text: "Voice Based Interview Mode" },
+                            { icon: <FaChartLine />, text: "Smart Performance Analysis" },
+                        ].map((item, i) => (
+                            <div key={i}
+                                className='flex items-center gap-3 bg-white border border-blue-100 rounded-xl px-4 py-3 text-sm text-gray-700 shadow-sm hover:scale-[1.02] transition'>
+                                <span className='text-blue-400'>{item.icon}</span>
+                                {item.text}
+                            </div>
+                        ))}
+                    </div>
+                </motion.div>
+
+                {/* RIGHT */}
+                <motion.div
+                    initial={{ x: 60, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    className="p-10">
+
+                    <h2 className='text-2xl font-semibold text-gray-800 mb-6'>
+                        Interview Details
+                    </h2>
 
                     <div className='space-y-5'>
 
-                        {
-                            [
-                                {
-                                    icon: <FaUserTie className="text-green-600 text-xl" />,
-                                    text: "Choose Role & Experience",
-                                },
-                                {
-                                    icon: <FaMicrophoneAlt className="text-green-600 text-xl" />,
-                                    text: "Smart Voice Interview",
-                                },
-                                {
-                                    icon: <FaChartLine className="text-green-600 text-xl" />,
-                                    text: "Performance Analytics",
-                                },
-                            ].map((item, index) => (
-                                <motion.div key={index}
-                                    initial={{ y: 30, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.3 + index * 0.15 }}
-                                    whileHover={{ scale: 1.03 }}
-                                    className='flex items-center space-x-4 bg-white p-4 rounded-xl shadow-sm cursor-pointer'>
-                                    {item.icon}
-                                    <span className='text-gray-700 font-medium'>{item.text}</span>
-
-                                </motion.div>
-                            ))
-                        }
-                    </div>
-
-
-
-                </motion.div>
-
-
-
-                <motion.div
-                    initial={{ x: 80, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.7 }}
-                    className="p-12 bg-white">
-
-                    <h2 className='text-3xl font-bold text-gray-800 mb-8'>
-                        Interview SetUp
-                    </h2>
-
-
-                    <div className='space-y-6'>
-
+                        {/* Role */}
                         <div className='relative'>
-                            <FaUserTie className='absolute top-4 left-4 text-gray-400' />
-
-                            <input type='text' placeholder='Enter role'
-                                className='w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition'
-                                onChange={(e) => setRole(e.target.value)} value={role} />
+                            <FaUserTie className='absolute top-3.5 left-3 text-gray-400 text-sm' />
+                            <input
+                                type='text'
+                                placeholder='Enter target role (e.g. Frontend Developer)'
+                                className='w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-200 outline-none'
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                            />
                         </div>
 
-
+                        {/* Experience */}
                         <div className='relative'>
-                            <FaBriefcase className='absolute top-4 left-4 text-gray-400' />
-
-                            <input type='text' placeholder='Experience (e.g. 2 years)'
-                                className='w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition'
-                                onChange={(e) => setExperience(e.target.value)} value={experience} />
-
-
-
+                            <FaBriefcase className='absolute top-3.5 left-3 text-gray-400 text-sm' />
+                            <input
+                                type='text'
+                                placeholder='Experience (e.g. Fresher / 2 Years)'
+                                className='w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-200 outline-none'
+                                value={experience}
+                                onChange={(e) => setExperience(e.target.value)}
+                            />
                         </div>
 
-                        <select value={mode}
+                        {/* Mode */}
+                        <select
+                            value={mode}
                             onChange={(e) => setMode(e.target.value)}
-                            className='w-full py-3 px-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition'>
-
+                            className='w-full py-2.5 px-3 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-200 outline-none'>
                             <option value="Technical">Technical Interview</option>
                             <option value="HR">HR Interview</option>
-
                         </select>
 
+                        {/* Resume Upload */}
                         {!analysisDone && (
-                            <motion.div
-                                whileHover={{ scale: 1.02 }}
+                            <div
                                 onClick={() => document.getElementById("resumeUpload").click()}
-                                className='border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition'>
+                                className='border border-dashed border-blue-100 rounded-lg p-6 text-center cursor-pointer hover:bg-blue-50/40 transition'>
 
-                                <FaFileUpload className='text-4xl mx-auto text-green-600 mb-3' />
+                                <FaFileUpload className='mx-auto text-2xl text-blue-300 mb-2' />
 
-                                <input type="file"
-                                    accept="application/pdf"
+                                <input
+                                    type="file"
                                     id="resumeUpload"
                                     className='hidden'
-                                    onChange={(e) => setResumeFile(e.target.files[0])} />
+                                    onChange={(e) => setResumeFile(e.target.files[0])}
+                                />
 
-                                <p className='text-gray-600 font-medium'>
-                                    {resumeFile ? resumeFile.name : "Click to upload resume (Optional)"}
+                                <p className='text-xs text-gray-600'>
+                                    {resumeFile ? resumeFile.name : "Upload resume (optional)"}
                                 </p>
 
                                 {resumeFile && (
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
+                                    <button
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleUploadResume()
                                         }}
-
-                                        className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition'>
+                                        className='mt-3 bg-blue-400 hover:bg-blue-500 text-white px-4 py-1.5 rounded-md text-xs'>
                                         {analyzing ? "Analyzing..." : "Analyze Resume"}
-
-
-
-                                    </motion.button>)}
-
-                            </motion.div>
-
-
+                                    </button>
+                                )}
+                            </div>
                         )}
 
+                        {/* Result */}
                         {analysisDone && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className='bg-gray-50 border border-gray-200 rounded-xl p-5 space-y-4'>
-                                <h3 className='text-lg font-semibold text-gray-800'>
-                                    Resume Analysis Result</h3>
+                            <div className='bg-blue-50/50 border border-blue-100 rounded-lg p-4 text-sm'>
+                                <p className='font-medium text-gray-700 mb-2'>AI Insights</p>
 
                                 {projects.length > 0 && (
-                                    <div>
-                                        <p className='font-medium text-gray-700 mb-1'>
-                                            Projects:</p>
-
-                                        <ul className='list-disc list-inside text-gray-600 space-y-1'>
-                                            {projects.map((p, i) => (
-                                                <li key={i}>{p}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                    <ul className='list-disc pl-4 text-gray-600 mb-2'>
+                                        {projects.map((p, i) => <li key={i}>{p}</li>)}
+                                    </ul>
                                 )}
 
                                 {skills.length > 0 && (
-                                    <div>
-                                        <p className='font-medium text-gray-700 mb-1'>
-                                            Skills:</p>
-
-                                        <div className='flex flex-wrap gap-2'>
-                                            {skills.map((s, i) => (
-                                                <span key={i} className='bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm'>{s}</span>
-                                            ))}
-                                        </div>
+                                    <div className='flex flex-wrap gap-2'>
+                                        {skills.map((s, i) => (
+                                            <span key={i} className='bg-white border border-blue-100 px-2 py-1 rounded text-xs text-blue-500'>
+                                                {s}
+                                            </span>
+                                        ))}
                                     </div>
                                 )}
-
-                            </motion.div>
+                            </div>
                         )}
 
-
-                        <motion.button
-                        onClick={handleStart}
+                        {/* Button */}
+                        <button
+                            onClick={handleStart}
                             disabled={!role || !experience || loading}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.95 }}
-                            className='w-full disabled:bg-gray-600 bg-green-600 hover:bg-green-700 text-white py-3 rounded-full text-lg font-semibold transition duration-300 shadow-md'>
-                            {loading ? "Staring...":"Start Interview"}
+                            className='w-full bg-blue-300 hover:bg-blue-400 text-white py-2.5 rounded-lg text-sm font-medium transition'>
+                            {loading ? "Preparing..." : "Start Interview"}
+                        </button>
 
-
-                        </motion.button>
                     </div>
-
                 </motion.div>
-            </div>
 
+            </div>
         </motion.div>
     )
 }
