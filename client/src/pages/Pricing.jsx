@@ -92,7 +92,7 @@ function Pricing() {
         },
 
         theme: {
-          color: "#60a5fa",   // light blue
+          color: "#60a5fa",  
         },
       }
 

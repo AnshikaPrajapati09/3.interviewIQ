@@ -56,7 +56,6 @@ function Step3Report({ report }) {
   const score = finalScore;
   const percentage = (score / 10) * 100;
 
-  /* PDF SAME */
   const downloadPDF = () => {
     const doc = new jsPDF("p", "mm", "a4");
 
@@ -94,7 +93,7 @@ function Step3Report({ report }) {
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-100 to-blue-50 px-4 sm:px-6 lg:px-10 py-8'>
 
-      {/* HEADER SAME */}
+      
       <div className='mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
 
         <div className='md:mb-10 w-full flex items-start gap-4 flex-wrap'>
@@ -121,10 +120,9 @@ function Step3Report({ report }) {
         </button>
       </div>
 
-      {/* GRID SAME */}
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8'>
 
-        {/* LEFT SAME */}
+    
         <div className='space-y-6'>
 
           <motion.div
@@ -193,7 +191,7 @@ function Step3Report({ report }) {
           </motion.div>
         </div>
 
-        {/* RIGHT SAME */}
+       
         <div className='lg:col-span-2 space-y-6'>
 
           <motion.div

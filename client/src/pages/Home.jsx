@@ -43,7 +43,7 @@ function Home() {
             </div>
           </div>
 
-          {/* HERO */}
+        
           <div className='text-center mb-24'>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -83,7 +83,7 @@ function Home() {
             </div>
           </div>
 
-          {/* STEPS (IMPROVED UI) */}
+          
           <div className='flex flex-col md:flex-row justify-center items-center gap-10 mb-24'>
             {[
               {
@@ -134,7 +134,7 @@ function Home() {
             ))}
           </div>
 
-          {/* FEATURES (unchanged layout, light UI only) */}
+         
           <div className='mb-28'>
             <h2 className='text-3xl font-semibold text-center mb-14 text-gray-800'>
               AI <span className="text-blue-500">Features</span>
@@ -174,7 +174,7 @@ function Home() {
             </div>
           </div>
 
-          {/* MODES (unchanged) */}
+         
           <div className='mb-24'>
             <h2 className='text-3xl font-semibold text-center mb-14 text-gray-800'>
               Interview <span className="text-blue-500">Modes</span>

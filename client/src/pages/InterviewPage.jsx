@@ -12,7 +12,7 @@ function InterviewPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 relative">
 
-      {/* soft background glow */}
+   
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.08),transparent_60%)]"></div>
 
       <div className="relative">
