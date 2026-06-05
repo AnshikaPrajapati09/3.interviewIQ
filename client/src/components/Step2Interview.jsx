@@ -1,5 +1,4 @@
 import React from 'react'
-import maleVideo from "../assets/videos/male-ai.mp4"
 import femaleVideo from "../assets/videos/female-ai.mp4"
 import Timer from './Timer'
 import { motion } from "motion/react"
@@ -27,7 +26,6 @@ function Step2Interview({ interviewData, onFinish }) {
   );
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [voiceGender, setVoiceGender] = useState("female");
   const [subtitle, setSubtitle] = useState("");
 
 
@@ -43,35 +41,19 @@ function Step2Interview({ interviewData, onFinish }) {
 
       // Try known female voices first
       const femaleVoice =
-        voices.find(v =>
-          v.name.toLowerCase().includes("zira") ||
-          v.name.toLowerCase().includes("samantha") ||
-          v.name.toLowerCase().includes("female")
-        );
+  voices.find(v =>
+    v.name.toLowerCase().includes("zira") ||
+    v.name.toLowerCase().includes("samantha") ||
+    v.name.toLowerCase().includes("female")
+  );
 
-      if (femaleVoice) {
-        setSelectedVoice(femaleVoice);
-        setVoiceGender("female");
-        return;
-      }
+if (femaleVoice) {
+  setSelectedVoice(femaleVoice);
+  return;
+}
 
-      // Try known male voices
-      const maleVoice =
-        voices.find(v =>
-          v.name.toLowerCase().includes("david") ||
-          v.name.toLowerCase().includes("mark") ||
-          v.name.toLowerCase().includes("male")
-        );
-
-      if (maleVoice) {
-        setSelectedVoice(maleVoice);
-        setVoiceGender("male");
-        return;
-      }
-
-      // Fallback: first voice (assume female)
+      // Fallback
       setSelectedVoice(voices[0]);
-      setVoiceGender("female");
     };
 
     loadVoices();
@@ -79,7 +61,7 @@ function Step2Interview({ interviewData, onFinish }) {
 
   }, [])
 
-  const videoSource = voiceGender === "male" ? maleVideo : femaleVideo;
+ const videoSource = femaleVideo;
 
 
   /* ---------------- SPEAK FUNCTION ---------------- */
