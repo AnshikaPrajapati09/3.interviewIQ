@@ -13,26 +13,45 @@ import { setUserData } from '../redux/userSlice';
 function Auth({ isModel = false }) {
   const dispatch = useDispatch()
 
-  const handleGoogleAuth = async () => {
-    try {
-      const response = await signInWithPopup(auth, provider)
-      let user = response.user
-      let name = user.displayName
-      let email = user.email
+ const handleGoogleAuth = async () => {
+  try {
+    console.log("Google Login Started...");
 
-      const result = await axios.post(
-        ServerUrl + "/api/auth/google",
-        { name, email },
-        { withCredentials: true }
-      )
+    const response = await signInWithPopup(auth, provider);
 
-      dispatch(setUserData(result.data))
-    } catch (error) {
-      console.log(error)
-      dispatch(setUserData(null))
+    console.log("Firebase Success:", response);
+
+    const user = response.user;
+    const name = user.displayName;
+    const email = user.email;
+
+    console.log("User Name:", name);
+    console.log("User Email:", email);
+
+    const result = await axios.post(
+      ServerUrl + "/api/auth/google",
+      { name, email },
+      { withCredentials: true }
+    );
+
+    console.log("Backend Response:", result.data);
+
+    dispatch(setUserData(result.data));
+
+  } catch (error) {
+    console.log("========== ERROR ==========");
+    console.log("Full Error:", error);
+    console.log("Message:", error.message);
+    console.log("Code:", error.code);
+
+    if (error.response) {
+      console.log("Response Status:", error.response.status);
+      console.log("Response Data:", error.response.data);
     }
-  }
 
+    dispatch(setUserData(null));
+  }
+};
   return (
     <div className={`
       w-full 
